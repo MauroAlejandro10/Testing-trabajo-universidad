@@ -58,6 +58,9 @@ El algoritmo devolverá:
 | CP-12 | Porcentaje mínimo igual a cero | 20 | 10 | 0 | 0% | Excepción: El porcentaje mínimo debe estar entre 1 y 100 |
 | CP-13 | Porcentaje mínimo mayor que cien | 20 | 10 | 0 | 101% | Excepción: El porcentaje mínimo debe estar entre 1 y 100 |
 | CP-14 | Porcentaje mínimo negativo | 20 | 10 | 0 | -1% | Excepción: El porcentaje mínimo debe estar entre 1 y 100 |
+| CP-23 | Solicitud nula | No aplica | No aplica | No aplica | No aplica | Excepción: La solicitud no puede ser nula |
+| CP-24 | Porcentaje mínimo no numérico (`NaN`) | 20 | 10 | 0 | NaN | Excepción: El porcentaje mínimo debe estar entre 1 y 100 |
+| CP-25 | Porcentaje mínimo infinito | 20 | 10 | 0 | Infinito | Excepción: El porcentaje mínimo debe estar entre 1 y 100 |
 
 ### 5.3 Valores límite y combinaciones especiales
 
