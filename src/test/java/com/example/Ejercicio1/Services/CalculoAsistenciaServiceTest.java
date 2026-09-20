@@ -172,4 +172,86 @@ void deberiaNoCumplir() {
             resultado.getMensaje()
     );
 }
+@Test
+void deberiaRedondearPorcentajeADosDecimales() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(3, 2, 0, 60);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertNotNull(resultado);
+
+    assertEquals(
+            66.67,
+            resultado.getPorcentajeSinAbonos(),
+            0.001
+    );
+
+    assertEquals(
+            66.67,
+            resultado.getPorcentajeConAbonos(),
+            0.001
+    );
+
+    assertEquals(
+            EstadoAsistencia.CUMPLE,
+            resultado.getEstado()
+    );
+}
+@Test
+void deberiaCumplirCuandoAlcanzaExactamenteElMinimo() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 10, 0, 50);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertEquals(10, resultado.getTotalComputado());
+    assertEquals(50.0, resultado.getPorcentajeSinAbonos(), 0.001);
+    assertEquals(50.0, resultado.getPorcentajeConAbonos(), 0.001);
+    assertEquals(EstadoAsistencia.CUMPLE, resultado.getEstado());
+    assertEquals(
+            "Cumple mediante asistencias efectivas",
+            resultado.getMensaje()
+    );
+}
+@Test
+void deberiaNoCumplirCuandoFaltanMasDeDiezPuntos() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(100, 39, 0, 50);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertEquals(39, resultado.getTotalComputado());
+
+    assertEquals(
+            39.0,
+            resultado.getPorcentajeConAbonos(),
+            0.001
+    );
+
+    assertEquals(
+            EstadoAsistencia.NO_CUMPLE,
+            resultado.getEstado()
+    );
+
+    assertEquals(
+            "No cumple el porcentaje mínimo",
+            resultado.getMensaje()
+    );
+}
 }

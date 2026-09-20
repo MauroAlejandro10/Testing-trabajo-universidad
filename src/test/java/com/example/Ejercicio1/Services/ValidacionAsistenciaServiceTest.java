@@ -66,4 +66,173 @@ class ValidacionAsistenciaServiceTest {
                 excepcion.getMessage()
         );
     }
+    @Test
+void deberiaRechazarSolicitudNula() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud = null;
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion =
+            assertThrows(
+                    DatosAsistenciaInvalidosException.class,
+                    () -> servicio.validar(solicitud)
+            );
+
+    // Assert
+    assertEquals(
+            "La solicitud no puede ser nula",
+            excepcion.getMessage()
+    );
+}
+@Test
+void deberiaRechazarAsistenciasNegativas() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, -1, 0, 50);
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion =
+            assertThrows(
+                    DatosAsistenciaInvalidosException.class,
+                    () -> servicio.validar(solicitud)
+            );
+
+    // Assert
+    assertEquals(
+            "Las asistencias no pueden ser negativas",
+            excepcion.getMessage()
+    );
+}
+@Test
+void deberiaRechazarAbonosNegativos() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 10, -1, 50);
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion =
+            assertThrows(
+                    DatosAsistenciaInvalidosException.class,
+                    () -> servicio.validar(solicitud)
+            );
+
+    // Assert
+    assertEquals(
+            "Los abonos no pueden ser negativos",
+            excepcion.getMessage()
+    );
+}
+@Test
+void deberiaRechazarAsistenciasMayoresQueObligaciones() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 21, 0, 50);
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion =
+            assertThrows(
+                    DatosAsistenciaInvalidosException.class,
+                    () -> servicio.validar(solicitud)
+            );
+
+    // Assert
+    assertEquals(
+            "Las asistencias no pueden superar las obligaciones",
+            excepcion.getMessage()
+    );
+}
+@Test
+void deberiaRechazarPorcentajeMinimoIgualACero() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 10, 0, 0);
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion =
+            assertThrows(
+                    DatosAsistenciaInvalidosException.class,
+                    () -> servicio.validar(solicitud)
+            );
+
+    // Assert
+    assertEquals(
+            "El porcentaje mínimo debe estar entre 1 y 100",
+            excepcion.getMessage()
+    );
+}
+@Test
+void deberiaRechazarPorcentajeMinimoMayorQueCien() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 10, 0, 101);
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion =
+            assertThrows(
+                    DatosAsistenciaInvalidosException.class,
+                    () -> servicio.validar(solicitud)
+            );
+
+    // Assert
+    assertEquals(
+            "El porcentaje mínimo debe estar entre 1 y 100",
+            excepcion.getMessage()
+    );
+}
+@Test
+void deberiaRechazarPorcentajeMinimoNaN() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(
+                    20,
+                    10,
+                    0,
+                    Double.NaN
+            );
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion =
+            assertThrows(
+                    DatosAsistenciaInvalidosException.class,
+                    () -> servicio.validar(solicitud)
+            );
+
+    // Assert
+    assertEquals(
+            "El porcentaje mínimo debe estar entre 1 y 100",
+            excepcion.getMessage()
+    );
+}
+@Test
+void deberiaRechazarPorcentajeMinimoInfinito() {
+
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(
+                    20,
+                    10,
+                    0,
+                    Double.POSITIVE_INFINITY
+            );
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion =
+            assertThrows(
+                    DatosAsistenciaInvalidosException.class,
+                    () -> servicio.validar(solicitud)
+            );
+
+    // Assert
+    assertEquals(
+            "El porcentaje mínimo debe estar entre 1 y 100",
+            excepcion.getMessage()
+    );
+}
 }
