@@ -135,7 +135,7 @@ El proyecto contiene pruebas para comprobar:
 - El controlador REST.
 - La conversión de excepciones en respuestas HTTP 400.
 
-Actualmente, el proyecto ejecuta **21 pruebas automatizadas** correctamente.
+Actualmente, el proyecto ejecuta **29 pruebas automatizadas** correctamente.
 
 Para ejecutar todas las pruebas en Windows:
 
@@ -146,7 +146,7 @@ Para ejecutar todas las pruebas en Windows:
 Resultado esperado:
 
 ```text
-Tests run: 21, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 29, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 

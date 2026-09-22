@@ -235,4 +235,41 @@ void deberiaRechazarPorcentajeMinimoInfinito() {
             excepcion.getMessage()
     );
 }
+@Test
+void deberiaRechazarObligacionesNegativas() {
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(-10, 0, 0, 50);
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion = assertThrows(
+            DatosAsistenciaInvalidosException.class,
+            () -> servicio.validar(solicitud)
+    );
+
+    // Assert
+    assertEquals(
+            "Las obligaciones deben ser mayores que cero",
+            excepcion.getMessage()
+    );
+}
+
+@Test
+void deberiaRechazarPorcentajeMinimoNegativo() {
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 10, 0, -1);
+
+    // Act
+    DatosAsistenciaInvalidosException excepcion = assertThrows(
+            DatosAsistenciaInvalidosException.class,
+            () -> servicio.validar(solicitud)
+    );
+
+    // Assert
+    assertEquals(
+            "El porcentaje mínimo debe estar entre 1 y 100",
+            excepcion.getMessage()
+    );
+}
 }

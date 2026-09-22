@@ -254,4 +254,106 @@ void deberiaNoCumplirCuandoFaltanMasDeDiezPuntos() {
             resultado.getMensaje()
     );
 }
+@Test
+void deberiaCumplirConAsistenciaCompleta() {
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 20, 0, 50);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertEquals(20, resultado.getTotalComputado());
+    assertEquals(100.0, resultado.getPorcentajeSinAbonos(), 0.001);
+    assertEquals(100.0, resultado.getPorcentajeConAbonos(), 0.001);
+    assertEquals(EstadoAsistencia.CUMPLE, resultado.getEstado());
+}
+
+@Test
+void deberiaNoCumplirSinAsistenciasNiAbonos() {
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 0, 0, 50);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertEquals(0, resultado.getTotalComputado());
+    assertEquals(0.0, resultado.getPorcentajeSinAbonos(), 0.001);
+    assertEquals(0.0, resultado.getPorcentajeConAbonos(), 0.001);
+    assertEquals(EstadoAsistencia.NO_CUMPLE, resultado.getEstado());
+}
+@Test
+void deberiaCumplirCuandoTodasLasObligacionesSonCubiertasPorAbonos() {
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 0, 20, 50);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertEquals(20, resultado.getTotalComputado());
+    assertEquals(0.0, resultado.getPorcentajeSinAbonos(), 0.001);
+    assertEquals(100.0, resultado.getPorcentajeConAbonos(), 0.001);
+    assertEquals(
+            EstadoAsistencia.CUMPLE_CON_ABONOS,
+            resultado.getEstado()
+    );
+}
+
+@Test
+void deberiaCumplirConPorcentajeMinimoDeUno() {
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(100, 1, 0, 1);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertEquals(1, resultado.getTotalComputado());
+    assertEquals(1.0, resultado.getPorcentajeSinAbonos(), 0.001);
+    assertEquals(1.0, resultado.getPorcentajeConAbonos(), 0.001);
+    assertEquals(EstadoAsistencia.CUMPLE, resultado.getEstado());
+}
+@Test
+void deberiaCumplirConPorcentajeMinimoDeCien() {
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(20, 20, 0, 100);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertEquals(20, resultado.getTotalComputado());
+    assertEquals(100.0, resultado.getPorcentajeSinAbonos(), 0.001);
+    assertEquals(100.0, resultado.getPorcentajeConAbonos(), 0.001);
+    assertEquals(EstadoAsistencia.CUMPLE, resultado.getEstado());
+}
+
+@Test
+void deberiaCumplirConUnaSolaObligacion() {
+    // Arrange
+    SolicitudAsistenciaDTO solicitud =
+            new SolicitudAsistenciaDTO(1, 1, 0, 50);
+
+    // Act
+    ResultadoAsistenciaDTO resultado =
+            calculoService.calcular(solicitud);
+
+    // Assert
+    assertEquals(1, resultado.getTotalComputado());
+    assertEquals(100.0, resultado.getPorcentajeSinAbonos(), 0.001);
+    assertEquals(100.0, resultado.getPorcentajeConAbonos(), 0.001);
+    assertEquals(EstadoAsistencia.CUMPLE, resultado.getEstado());
+}
 }
